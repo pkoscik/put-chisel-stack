@@ -1,0 +1,10 @@
+# 12 MHz clock
+set_io -nowarn clock         21
+
+# LEDs
+set_io -nowarn io_leds[0]          99
+set_io -nowarn io_leds[1]          98
+set_io -nowarn io_leds[2]          97
+
+# Pull reset to gnd
+set_io -nowarn reset  87

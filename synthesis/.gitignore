@@ -1,0 +1,5 @@
+*.sv
+*.bin
+*.json
+*.asc
+*-yosys.log

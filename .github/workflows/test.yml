@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build required docker images
+        run: |
+          git clone https://github.com/pkoscik/chisel-toolchain-dockerfile
+          pushd chisel-toolchain-dockerfile
+          sudo docker build -t chisel-fpga-toolchain .
+          popd
+
+          git clone https://github.com/pkoscik/oss-fpga-toolchain-dockerfile
+          pushd oss-fpga-toolchain-dockerfile
+          sudo docker build -t oss-fpga-toolchain .
+          popd
+      
+      - name: Run workload
+        run: |
+          sudo ./run.sh -s -d
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthesis_results
+          path: |
+            synthesis/*.sv
+            synthesis/*.bin
+            synthesis/*.json
+            synthesis/*.asc
+            synthesis/*-yosys.log
